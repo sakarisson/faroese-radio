@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Sakarisson/faroese-radio#readme",
   "dependencies": {
+    "node-fetch": "^2.1.2",
     "xml2js": "^0.4.19"
   }
 }
