@@ -9,6 +9,7 @@ import fetch from 'node-fetch';
 import xmlParser from 'xml2js';
 import EventEmitter from 'events';
 import _ from 'underscore';
+import { getLastStationSong } from './data';
 
 class Parser extends EventEmitter {
   constructor() {
@@ -20,7 +21,8 @@ class Parser extends EventEmitter {
     this.interval = null;
   }
 
-  startListening() {
+  async startListening() {
+    this.lastSong = await getLastStationSong(this.stationName);
     this.interval = setInterval(() => {
       this.updateCurrentSong();
     }, 1000);
@@ -32,16 +34,19 @@ class Parser extends EventEmitter {
     }
   }
 
-  getCurrentData() {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const data = await fetch(this.link);
-        const stringifiedData = await data.text();
-        resolve(stringifiedData);
-      } catch (e) {
-        reject(e);
-      }
-    });
+  async getCurrentData() {
+    const data = await fetch(this.link);
+    const stringifiedData = await data.text();
+    return stringifiedData;
+  }
+
+  checkIfNewSong(currentSong) {
+    if (!_.isEqual(currentSong, this.lastSong)) {
+      this.lastSong = currentSong;
+      const song = { ...currentSong };
+      song.station = this.stationName;
+      this.emit('new song', song);
+    }
   }
 
   /**
@@ -61,15 +66,6 @@ class Parser extends EventEmitter {
   updateCurrentSong() {
     throw new Error('updateCurrentSong has not been implemented');
   }
-
-  checkIfNewSong(currentSong) {
-    if (!_.isEqual(currentSong, this.lastSong)) {
-      this.lastSong = currentSong;
-      const song = { ...currentSong };
-      song.station = this.stationName;
-      this.emit('new song', song);
-    }
-  }
 }
 
 export class KvfParser extends Parser {
@@ -79,16 +75,13 @@ export class KvfParser extends Parser {
     this.stationName = 'kvf';
   }
 
-  setJson() {
-    return new Promise(async (resolve, reject) => {
-      const xml = await this.getCurrentData();
-      xmlParser.parseString(xml, (err, result) => {
-        if (err) {
-          reject(err);
-        }
-        this.json = result;
-        resolve();
-      });
+  async setJson() {
+    const xml = await this.getCurrentData();
+    xmlParser.parseString(xml, (err, result) => {
+      if (err) {
+        return;
+      }
+      this.json = result;
     });
   }
 
