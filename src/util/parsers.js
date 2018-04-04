@@ -5,11 +5,11 @@
  * music from a given radio station
  */
 
-import fetch from 'node-fetch';
 import xmlParser from 'xml2js';
 import EventEmitter from 'events';
 import _ from 'underscore';
-import { getLastStationSong } from './data';
+import { getLastStationSong } from './database';
+import { getCurrentData } from './externalData';
 
 class Parser extends EventEmitter {
   constructor() {
@@ -32,12 +32,6 @@ class Parser extends EventEmitter {
     if (this.interval !== null) {
       clearInterval(this.interval);
     }
-  }
-
-  async getCurrentData() {
-    const data = await fetch(this.link);
-    const stringifiedData = await data.text();
-    return stringifiedData;
   }
 
   checkIfNewSong(currentSong) {
@@ -76,7 +70,7 @@ export class KvfParser extends Parser {
   }
 
   async setJson() {
-    const xml = await this.getCurrentData();
+    const xml = await getCurrentData(this.link);
     xmlParser.parseString(xml, (err, result) => {
       if (err) {
         return;
