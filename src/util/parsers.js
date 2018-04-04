@@ -7,11 +7,29 @@
 
 import fetch from 'node-fetch';
 import xmlParser from 'xml2js';
+import EventEmitter from 'events';
+import _ from 'underscore';
 
-class Parser {
+class Parser extends EventEmitter {
   constructor() {
+    super();
     this.link = null;
+    this.stationName = null; // should be unique
     this.json = null;
+    this.lastSong = null;
+    this.interval = null;
+  }
+
+  startListening() {
+    this.interval = setInterval(() => {
+      this.updateCurrentSong();
+    }, 1000);
+  }
+
+  stopListening() {
+    if (this.interval !== null) {
+      clearInterval(this.interval);
+    }
   }
 
   getCurrentData() {
@@ -26,19 +44,31 @@ class Parser {
     });
   }
 
+  /**
+   * Should get raw data from radio source and then save it to JSON
+   */
+
   // eslint-disable-next-line class-methods-use-this
   setJson() {
     throw new Error('getJson has not been implemented');
   }
 
   /**
-   * Should either return a JSON object in the format:
-   * { artist:String, title:String }
-   * or null if no song is playing
+   * Should get the current song and then call checkIfNewSong
    */
+
   // eslint-disable-next-line class-methods-use-this
-  getCurrentSong() {
-    throw new Error('getCurrentSong has not been implemented');
+  updateCurrentSong() {
+    throw new Error('updateCurrentSong has not been implemented');
+  }
+
+  checkIfNewSong(currentSong) {
+    if (!_.isEqual(currentSong, this.lastSong)) {
+      this.lastSong = currentSong;
+      const song = { ...currentSong };
+      song.station = this.stationName;
+      this.emit('new song', song);
+    }
   }
 }
 
@@ -46,6 +76,7 @@ export class KvfParser extends Parser {
   constructor() {
     super();
     this.link = 'http://kvf.fo/service/now-next.xml';
+    this.stationName = 'kvf';
   }
 
   setJson() {
@@ -61,16 +92,18 @@ export class KvfParser extends Parser {
     });
   }
 
-  async getCurrentSong() {
+  async updateCurrentSong() {
     await this.setJson();
     const { artist, title } = this.json.data.now[0];
     if (artist[0] === '' || title[0] === '') {
       return null;
     }
-    return {
+    const currentSong = {
       artist: artist[0],
       title: title[0],
     };
+    this.checkIfNewSong(currentSong);
+    return currentSong;
   }
 }
 
