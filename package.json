@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/Sakarisson/faroese-radio#readme",
   "dependencies": {
+    "dotenv": "^5.0.1",
     "events": "^2.0.0",
     "node-fetch": "^2.1.2",
     "pg": "^7.4.1",
