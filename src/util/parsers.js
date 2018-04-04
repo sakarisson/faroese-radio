@@ -5,8 +5,8 @@
  * music from a given radio station
  */
 
-const fetch = require('node-fetch');
-const xmlParser = require('xml2js');
+import fetch from 'node-fetch';
+import xmlParser from 'xml2js';
 
 class Parser {
   constructor() {
@@ -31,13 +31,18 @@ class Parser {
     throw new Error('getJson has not been implemented');
   }
 
+  /**
+   * Should either return a JSON object in the format:
+   * { artist:String, title:String }
+   * or null if no song is playing
+   */
   // eslint-disable-next-line class-methods-use-this
   getCurrentSong() {
     throw new Error('getCurrentSong has not been implemented');
   }
 }
 
-class KvfParser extends Parser {
+export class KvfParser extends Parser {
   constructor() {
     super();
     this.link = 'http://kvf.fo/service/now-next.xml';
@@ -58,6 +63,15 @@ class KvfParser extends Parser {
 
   async getCurrentSong() {
     await this.setJson();
-    return this.json.data.now;
+    const { artist, title } = this.json.data.now[0];
+    if (artist[0] === '' || title[0] === '') {
+      return null;
+    }
+    return {
+      artist: artist[0],
+      title: title[0],
+    };
   }
 }
+
+export default Parser;
