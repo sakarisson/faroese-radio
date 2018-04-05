@@ -29,8 +29,7 @@ export const getStationId = async (shortName) => {
       return result.rows[0].id;
     }
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(e);
+    throw e;
   }
   return null;
 };
@@ -145,13 +144,38 @@ const addSongToDatabase = async (song) => {
   return null;
 };
 
+const addStationToDatabase = async (station) => {
+  try {
+    const result = await client.query(`
+      insert into stations
+      (short_name)
+      values
+      ($1)
+      returning id
+    `, [
+      station.shortName,
+    ]);
+
+    if (result.rows.length > 0) {
+      const { id } = result.rows[0];
+      return id;
+    }
+  } catch (e) {
+    throw e;
+  }
+  return null;
+};
+
 export const insertSong = async (song) => {
   try {
     let songId = await getSongId(song);
     if (songId === null) {
       songId = await addSongToDatabase(song);
     }
-    const stationId = await getStationId(song.station);
+    let stationId = await getStationId(song.station);
+    if (stationId === null) {
+      stationId = await addStationToDatabase({ shortName: song.station });
+    }
     await client.query(`
       insert into song_plays
       (fk_songs, fk_stations)
