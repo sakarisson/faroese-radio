@@ -5,11 +5,6 @@ const mockDatabase = {
     id: 1,
     short_name: 'kvf',
     long_name: 'Kringvarp Føroya',
-  },
-  {
-    id: 2,
-    short_name: 'test',
-    long_name: 'Test Station',
   }],
   songs: [{
     id: 1,
@@ -20,17 +15,10 @@ const mockDatabase = {
   },
   {
     id: 2,
-    artist: 'Last Artist',
-    title: 'Last Song',
+    artist: 'kvf Last Artist',
+    title: 'kvf Last Song',
     fk_stations: 1,
     time_played: '2018-04-04 16:20:04.387387',
-  },
-  {
-    id: 3,
-    artist: 'Other Station',
-    title: 'Some songs',
-    fk_stations: 2,
-    time_played: '2018-04-04 14:44:09.134784',
   }],
 };
 
