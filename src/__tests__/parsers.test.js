@@ -18,5 +18,22 @@ describe('Parsers', () => {
       const { lastSong } = kvfParser;
       expect(lastSong).toEqual({ artist: 'Test Artist', title: 'Test Song 1' });
     });
+
+    it('lastSong should be set after calling startListening', async () => {
+      const kvfParser = new KvfParser();
+      await kvfParser.startListening();
+      const { lastSong } = kvfParser;
+      expect(lastSong).toEqual({ artist: 'Last Artist', title: 'Last Song' });
+    });
+
+    it('should trigger an event when song is updated', async (done) => {
+      expect.assertions(1);
+      const kvfParser = new KvfParser();
+      await kvfParser.startListening();
+      kvfParser.on('new song', (song) => {
+        expect(song).toEqual({ artist: 'Test Artist', title: 'Test Song 1', station: 'kvf' });
+        done();
+      });
+    });
   });
 });
