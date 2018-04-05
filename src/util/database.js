@@ -190,7 +190,7 @@ export const insertSong = async (song) => {
     console.log(e);
     return false;
   }
-  return false;
+  return true;
 };
 
 export default null;
