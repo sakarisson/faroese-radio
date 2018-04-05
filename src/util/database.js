@@ -37,7 +37,7 @@ export const getStationId = async (shortName) => {
 export const getLastStationSong = async (shortName) => {
   try {
     const result = await client.query(`
-      select artists.name, songs.title
+      select artists.name as artist, songs.title
       from artists, songs, stations, song_plays
       where stations.short_name = $1
       and song_plays.fk_stations = stations.id
