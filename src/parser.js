@@ -28,9 +28,7 @@ const insertSong = async (song) => {
     }
     await insertSongplayToDatabase(songId, stationId);
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log(e);
-    return false;
+    throw e;
   }
   return true;
 };
