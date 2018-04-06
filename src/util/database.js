@@ -56,16 +56,13 @@ export const getLastStationSong = async (shortName) => {
   return null;
 };
 
-export const getSongId = async (song) => {
+export const getArtistId = async (artist) => {
   try {
     const result = await client.query(`
-      select songs.id from songs, artists
-      where songs.fk_artists = artists.id
-      and artists.name = $1
-      and songs.title = $2
+      select artists.id from artists
+      where artists.name = $1
     `, [
-      song.artist,
-      song.title,
+      artist,
     ]);
 
     if (result.rows.length > 0) {
@@ -78,13 +75,16 @@ export const getSongId = async (song) => {
   return null;
 };
 
-export const getArtistId = async (artist) => {
+export const getSongId = async (song) => {
   try {
     const result = await client.query(`
-      select artists.id from artists
-      where artists.name = $1
+      select songs.id from songs, artists
+      where songs.fk_artists = artists.id
+      and artists.name = $1
+      and songs.title = $2
     `, [
-      artist,
+      song.artist,
+      song.title,
     ]);
 
     if (result.rows.length > 0) {

@@ -23,12 +23,26 @@ const mockDatabase = {
   }],
 };
 
+const getNextId = table => _.max(table, row => row.id).id + 1;
+
+// eslint-disable-next-line arrow-body-style
+export const connect = async () => {
+  // Bib bab bub, connecting...
+  return true;
+};
+
+export const getStationId = async (shortName) => {
+  const { stations } = mockDatabase;
+  const stationId = _.findWhere(stations, { short_name: shortName }).id;
+  return stationId;
+};
+
 export const getLastStationSong = async (shortName) => {
   const {
     // eslint-disable-next-line camelcase
-    stations, artists, songs, song_plays,
+    artists, songs, song_plays,
   } = mockDatabase;
-  const stationId = _.where(stations, { short_name: shortName })[0].id;
+  const stationId = await getStationId(shortName);
   const stationSongsPlays = _.where(song_plays, { fk_stations: stationId });
   const lastStationSongPlay = _.max(stationSongsPlays, song => song.id);
   const lastStationSong = _.findWhere(songs, { id: lastStationSongPlay.fk_songs });
@@ -40,6 +54,54 @@ export const getLastStationSong = async (shortName) => {
   };
 
   return song;
+};
+
+export const getArtistId = async (artist) => {
+  const { artists } = mockDatabase;
+  const dbArtist = _.findWhere(artists, { name: artist });
+  if (!dbArtist) {
+    return null;
+  }
+  return dbArtist.id;
+};
+
+export const getSongId = async (song) => {
+  const { songs } = mockDatabase;
+  const artistId = await getArtistId(song.artist);
+  const dbSong = _.findWhere(songs, { title: song.title, fk_artists: artistId });
+  if (!dbSong) {
+    return null;
+  }
+  return dbSong.id;
+};
+
+export const addArtistToDatabase = async (artist) => {
+  const { artists } = mockDatabase;
+  const id = getNextId(artists);
+  artists.push({ id, name: artist });
+  return null;
+};
+
+export const addSongToDatabase = async (artistId, title) => {
+  const { songs } = mockDatabase;
+  const id = getNextId(songs);
+  songs.push({ id, title, fk_artists: artistId });
+  return null;
+};
+
+export const addStationToDatabase = async (station) => {
+  const { stations } = mockDatabase;
+  const id = getNextId(stations);
+  const { shortName, longName } = station;
+  stations.push({ id, short_name: shortName, long_name: longName });
+  return null;
+};
+
+export const insertSongplayToDatabase = async (songId, stationId) => {
+  const songPlays = mockDatabase.song_plays;
+  const id = getNextId(songPlays);
+  songPlays.push({ id, fk_songs: songId, fk_stations: stationId });
+  return true;
 };
 
 export default null;
