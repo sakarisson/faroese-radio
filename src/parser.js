@@ -1,5 +1,6 @@
 import parsers from './util/parsers';
 import {
+  connect,
   getSongId,
   getArtistId,
   addArtistToDatabase,
@@ -8,6 +9,8 @@ import {
   getStationId,
   insertSongplayToDatabase,
 } from './util/database';
+
+connect();
 
 const insertSong = async (song) => {
   try {

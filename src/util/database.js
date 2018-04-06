@@ -12,15 +12,18 @@ const client = new Client({
   idltTimeoutMillis: 3000,
 });
 
-client.connect((e) => {
-  if (e) {
-    // eslint-disable-next-line no-console
-    console.log(e);
-  } else {
+export const connect = async () => {
+  client.connect((e) => {
+    if (e) {
+      // eslint-disable-next-line no-console
+      console.log(e);
+      return false;
+    }
     // eslint-disable-next-line no-console
     console.log('Database client connected');
-  }
-});
+    return true;
+  });
+};
 
 export const getStationId = async (shortName) => {
   try {
