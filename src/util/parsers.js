@@ -8,6 +8,7 @@
 import xmlParser from 'xml2js';
 import EventEmitter from 'events';
 import _ from 'underscore';
+import _s from 'underscore.string';
 import { getLastStationSong } from './database';
 import { getCurrentData } from './externalData';
 
@@ -64,7 +65,7 @@ class Parser extends EventEmitter {
   }
 }
 
-export class KvfParser extends Parser {
+class KvfParser extends Parser {
   constructor() {
     super();
     this.link = 'http://kvf.fo/service/now-next.xml';
@@ -87,7 +88,7 @@ export class KvfParser extends Parser {
     const { artist, title } = this.json.data.now[0];
     if (artist[0] === '' || title[0] === '') {
       return null;
-    } else if (_.contains(title[0], 'Høvuðstíðindi') || _.contains(title[0], 'GMF')) { // Manual exceptions
+    } else if (_s.contains(title[0], 'Høvuðstíðindi') || _s.contains(title[0], 'GMF')) { // Manual exceptions
       return null;
     }
     const currentSong = {
