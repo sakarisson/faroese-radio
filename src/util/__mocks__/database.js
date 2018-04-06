@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import moment from 'moment';
 
 const mockDatabase = {
   stations: [{
@@ -19,7 +20,7 @@ const mockDatabase = {
     id: 1,
     fk_songs: 1,
     fk_stations: 1,
-    time_played: '2018-04-04 14:44:09.134784',
+    time_played: '2018-04-06 10:20:21.196721+03',
   }],
 };
 
@@ -79,14 +80,14 @@ export const addArtistToDatabase = async (artist) => {
   const { artists } = mockDatabase;
   const id = getNextId(artists);
   artists.push({ id, name: artist });
-  return null;
+  return id;
 };
 
 export const addSongToDatabase = async (artistId, title) => {
   const { songs } = mockDatabase;
   const id = getNextId(songs);
   songs.push({ id, title, fk_artists: artistId });
-  return null;
+  return id;
 };
 
 export const addStationToDatabase = async (station) => {
@@ -94,13 +95,20 @@ export const addStationToDatabase = async (station) => {
   const id = getNextId(stations);
   const { shortName, longName } = station;
   stations.push({ id, short_name: shortName, long_name: longName });
-  return null;
+  return id;
 };
 
 export const insertSongplayToDatabase = async (songId, stationId) => {
   const songPlays = mockDatabase.song_plays;
   const id = getNextId(songPlays);
-  songPlays.push({ id, fk_songs: songId, fk_stations: stationId });
+  let time = moment().format('YYYY-MM-DD HH:MM:ss.SSSSSSZ');
+  time = time.substr(0, time.length - 3);
+  songPlays.push({
+    id,
+    fk_songs: songId,
+    fk_stations: stationId,
+    time_played: time,
+  });
   return true;
 };
 
