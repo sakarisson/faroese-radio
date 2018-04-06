@@ -4,10 +4,10 @@ import { Client } from 'pg';
 dotenv.config();
 
 const client = new Client({
-  user: process.env.DBUSER,
+  user: process.env.DB_USER,
   database: process.env.DATABASE,
-  host: process.env.DBHOST,
-  password: process.env.DBPASSWORD,
+  host: process.env.DB_HOST,
+  password: process.env.DB_PASSWORD,
   port: 5432,
   idltTimeoutMillis: 3000,
 });

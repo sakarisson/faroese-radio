@@ -6,6 +6,8 @@ COPY package.json .
 
 RUN npm i
 
+RUN npm i -g nodemon babel-cli
+
 COPY . .
 
 COPY wait-for-it.sh .
