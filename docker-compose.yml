@@ -6,8 +6,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: faroese-radio
-      volumes:
-        ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    volumes:
+      - ./10-init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - webnet
   web:

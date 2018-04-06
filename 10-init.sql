@@ -5,37 +5,14 @@
 -- Dumped from database version 9.6.6
 -- Dumped by pg_dump version 9.6.6
 
--- Started on 2018-04-06 11:34:26 EEST
+-- Started on 2018-04-06 16:19:24 EEST
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
-SET row_security = off;
-
---
--- TOC entry 2429 (class 1262 OID 24586)
--- Name: faroese-radio; Type: DATABASE; Schema: -; Owner: postgres
---
-
-CREATE DATABASE "faroese-radio" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C' LC_CTYPE = 'C';
-
-
-ALTER DATABASE "faroese-radio" OWNER TO postgres;
-
-\connect -reuse-previous=on "dbname='faroese-radio'"
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-SET row_security = off;
 
 --
 -- TOC entry 1 (class 3079 OID 12655)
@@ -325,7 +302,7 @@ ALTER TABLE ONLY songs
     ADD CONSTRAINT songs_fk_artists FOREIGN KEY (fk_artists) REFERENCES artists(id) ON DELETE CASCADE;
 
 
--- Completed on 2018-04-06 11:34:26 EEST
+-- Completed on 2018-04-06 16:19:24 EEST
 
 --
 -- PostgreSQL database dump complete
