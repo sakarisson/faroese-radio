@@ -32,9 +32,10 @@ const insertSong = async (song) => {
   return true;
 };
 
-export const startAll = () => {
-  parsers.forEach((ParserObject) => {
-    const instance = new ParserObject();
+const parserInstances = parsers.map(ParserObject => new ParserObject());
+
+export const startAllParsers = () => {
+  parserInstances.forEach((instance) => {
     instance.startListening();
     instance.on('new song', (song) => {
       // eslint-disable-next-line no-console
@@ -42,6 +43,10 @@ export const startAll = () => {
       insertSong(song);
     });
   });
+};
+
+export const stopAllParsers = () => {
+  parserInstances.forEach(instance => instance.stopListening());
 };
 
 export default this;

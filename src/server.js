@@ -1,3 +1,3 @@
-import { startAll } from './parser';
+import { startAllParsers } from './parser';
 
-startAll();
+startAllParsers();
