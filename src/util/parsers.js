@@ -84,6 +84,8 @@ export class KvfParser extends Parser {
     const { artist, title } = this.json.data.now[0];
     if (artist[0] === '' || title[0] === '') {
       return null;
+    } else if (_.contains(title[0], 'Høvuðstíðindi') || _.contains(title[0], 'GMF')) { // Manual exceptions
+      return null;
     }
     const currentSong = {
       artist: artist[0],
@@ -94,4 +96,6 @@ export class KvfParser extends Parser {
   }
 }
 
-export default Parser;
+export default [
+  KvfParser,
+];
