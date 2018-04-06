@@ -6,12 +6,12 @@ jest.mock('../util/externalData');
 
 describe('Parsers', () => {
   parsers.forEach((StationParser) => {
-    const key = new StationParser().stationName;
+    const key = new StationParser().shortName;
     describe(key, () => {
       it('should be possible to get last song', async () => {
         const stationParser = new StationParser();
-        const { stationName } = stationParser;
-        expect(await getLastStationSong(stationName)).toEqual({ artist: `${key} Last Artist`, title: `${key} Last Song` });
+        const { shortName } = stationParser;
+        expect(await getLastStationSong(shortName)).toEqual({ artist: `${key} Last Artist`, title: `${key} Last Song` });
       });
 
       it('should be possible to set current song', async () => {
@@ -29,11 +29,13 @@ describe('Parsers', () => {
       });
 
       it('should trigger an event when song is updated', async (done) => {
-        expect.assertions(1);
+        expect.assertions(2);
         const stationParser = new StationParser();
         await stationParser.startListening();
         stationParser.on('new song', (song) => {
-          expect(song).toEqual({ artist: `${key} Test Artist`, title: `${key} Test Song 1`, station: `${key}` });
+          expect(song).toMatchObject({ artist: `${key} Test Artist`, title: `${key} Test Song 1` });
+          const { station } = song;
+          expect(station).toMatchObject({ shortName: key });
           done();
         });
       });

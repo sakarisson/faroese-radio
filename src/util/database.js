@@ -48,13 +48,12 @@ export const getLastStationSong = async (shortName) => {
     const { artist, title } = result.rows[0];
     return { artist, title };
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(e.message);
+    // continue
   }
   return null;
 };
 
-const getSongId = async (song) => {
+export const getSongId = async (song) => {
   try {
     const result = await client.query(`
       select songs.id from songs, artists
@@ -76,7 +75,7 @@ const getSongId = async (song) => {
   return null;
 };
 
-const getArtistId = async (artist) => {
+export const getArtistId = async (artist) => {
   try {
     const result = await client.query(`
       select artists.id from artists
@@ -95,7 +94,7 @@ const getArtistId = async (artist) => {
   return null;
 };
 
-const addArtistToDatabase = async (artist) => {
+export const addArtistToDatabase = async (artist) => {
   try {
     const result = await client.query(`
       insert into artists
@@ -117,12 +116,8 @@ const addArtistToDatabase = async (artist) => {
   return null;
 };
 
-const addSongToDatabase = async (song) => {
+export const addSongToDatabase = async (artistId, title) => {
   try {
-    let artistId = await getArtistId(song.artist);
-    if (artistId === null) {
-      artistId = await addArtistToDatabase(song.artist);
-    }
     const result = await client.query(`
       insert into songs
       (title, fk_artists)
@@ -130,7 +125,7 @@ const addSongToDatabase = async (song) => {
       ($1, $2)
       returning id
     `, [
-      song.title,
+      title,
       artistId,
     ]);
 
@@ -144,16 +139,18 @@ const addSongToDatabase = async (song) => {
   return null;
 };
 
-const addStationToDatabase = async (station) => {
+export const addStationToDatabase = async (station) => {
   try {
+    const { shortName, longName } = station;
     const result = await client.query(`
       insert into stations
-      (short_name)
+      (short_name, long_name)
       values
-      ($1)
+      ($1, $2)
       returning id
     `, [
-      station.shortName,
+      shortName,
+      longName,
     ]);
 
     if (result.rows.length > 0) {
@@ -166,16 +163,8 @@ const addStationToDatabase = async (station) => {
   return null;
 };
 
-export const insertSong = async (song) => {
+export const insertSongplayToDatabase = async (songId, stationId) => {
   try {
-    let songId = await getSongId(song);
-    if (songId === null) {
-      songId = await addSongToDatabase(song);
-    }
-    let stationId = await getStationId(song.station);
-    if (stationId === null) {
-      stationId = await addStationToDatabase({ shortName: song.station });
-    }
     await client.query(`
       insert into song_plays
       (fk_songs, fk_stations)
@@ -186,9 +175,7 @@ export const insertSong = async (song) => {
       stationId,
     ]);
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log(e);
-    return false;
+    throw e;
   }
   return true;
 };

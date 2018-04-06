@@ -15,14 +15,15 @@ class Parser extends EventEmitter {
   constructor() {
     super();
     this.link = null;
-    this.stationName = null; // should be unique
+    this.shortName = null; // should be unique
+    this.longName = null; // Name as it would normally appear
     this.json = null;
     this.lastSong = null;
     this.interval = null;
   }
 
   async startListening() {
-    this.lastSong = await getLastStationSong(this.stationName);
+    this.lastSong = await getLastStationSong(this.shortName);
     this.interval = setInterval(() => {
       this.updateCurrentSong();
     }, 1000);
@@ -38,7 +39,8 @@ class Parser extends EventEmitter {
     if (!_.isEqual(currentSong, this.lastSong)) {
       this.lastSong = currentSong;
       const song = { ...currentSong };
-      song.station = this.stationName;
+      const { shortName, longName } = this;
+      song.station = { shortName, longName };
       this.emit('new song', song);
     }
   }
@@ -66,7 +68,8 @@ export class KvfParser extends Parser {
   constructor() {
     super();
     this.link = 'http://kvf.fo/service/now-next.xml';
-    this.stationName = 'kvf';
+    this.shortName = 'kvf';
+    this.longName = 'Kringvarp Føroya';
   }
 
   async setJson() {
