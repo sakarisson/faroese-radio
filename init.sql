@@ -5,9 +5,28 @@
 -- Dumped from database version 9.6.6
 -- Dumped by pg_dump version 9.6.6
 
--- Started on 2018-04-05 16:59:16 EEST
+-- Started on 2018-04-06 11:34:26 EEST
 
-USE faroese-radio;
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2429 (class 1262 OID 24586)
+-- Name: faroese-radio; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE "faroese-radio" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C' LC_CTYPE = 'C';
+
+
+ALTER DATABASE "faroese-radio" OWNER TO postgres;
+
+\connect -reuse-previous=on "dbname='faroese-radio'"
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -280,33 +299,33 @@ ALTER TABLE ONLY stations
 
 
 --
--- TOC entry 2306 (class 2606 OID 24652)
+-- TOC entry 2306 (class 2606 OID 24674)
 -- Name: song_plays song_plays_fk_songs; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY song_plays
-    ADD CONSTRAINT song_plays_fk_songs FOREIGN KEY (fk_songs) REFERENCES songs(id);
+    ADD CONSTRAINT song_plays_fk_songs FOREIGN KEY (fk_songs) REFERENCES songs(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 2307 (class 2606 OID 24657)
+-- TOC entry 2307 (class 2606 OID 24684)
 -- Name: song_plays song_plays_fk_stations; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY song_plays
-    ADD CONSTRAINT song_plays_fk_stations FOREIGN KEY (fk_stations) REFERENCES stations(id);
+    ADD CONSTRAINT song_plays_fk_stations FOREIGN KEY (fk_stations) REFERENCES stations(id) ON DELETE CASCADE;
 
 
 --
--- TOC entry 2305 (class 2606 OID 24647)
+-- TOC entry 2305 (class 2606 OID 24679)
 -- Name: songs songs_fk_artists; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY songs
-    ADD CONSTRAINT songs_fk_artists FOREIGN KEY (fk_artists) REFERENCES artists(id);
+    ADD CONSTRAINT songs_fk_artists FOREIGN KEY (fk_artists) REFERENCES artists(id) ON DELETE CASCADE;
 
 
--- Completed on 2018-04-05 16:59:17 EEST
+-- Completed on 2018-04-06 11:34:26 EEST
 
 --
 -- PostgreSQL database dump complete
