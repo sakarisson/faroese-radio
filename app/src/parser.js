@@ -9,6 +9,7 @@ import {
   getStationId,
   insertSongplayToDatabase,
 } from './util/database';
+import logger from './util/logger';
 
 connect();
 
@@ -39,8 +40,7 @@ export const startAllParsers = () => {
   parserInstances.forEach((instance) => {
     instance.startListening();
     instance.on('new song', (song) => {
-      // eslint-disable-next-line no-console
-      console.log('new song playing', song);
+      logger.write('new song playing', song);
       insertSong(song);
     });
   });

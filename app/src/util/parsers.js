@@ -11,6 +11,7 @@ import _ from 'underscore';
 import _s from 'underscore.string';
 import { getLastStationSong } from './database';
 import { getCurrentData } from './externalData';
+import logger from './logger';
 
 class Parser extends EventEmitter {
   constructor() {
@@ -29,8 +30,7 @@ class Parser extends EventEmitter {
       try {
         this.updateCurrentSong();
       } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(e.message);
+        logger.write(e.message);
       }
     }, 1000);
   }
@@ -80,8 +80,9 @@ class KvfParser extends Parser {
 
   async setJson() {
     const xml = await getCurrentData(this.link);
-    xmlParser.parseString(xml, (err, result) => {
-      if (err) {
+    xmlParser.parseString(xml, (e, result) => {
+      if (e) {
+        logger.write(e.message);
         return;
       }
       this.json = result;
@@ -94,6 +95,7 @@ class KvfParser extends Parser {
     if (artist[0] === '' || title[0] === '') {
       return null;
     } else if (_s.contains(title[0], 'Høvuðstíðindi') || _s.contains(title[0], 'GMF')) { // Manual exceptions
+      logger.write(`Blacklisted song playing on KVF: ${title[0]}`);
       return null;
     }
     const currentSong = {

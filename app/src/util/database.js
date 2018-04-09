@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import { Client } from 'pg';
+import logger from './logger';
 
 dotenv.config();
 
@@ -15,12 +16,10 @@ const client = new Client({
 export const connect = async () => {
   client.connect((e) => {
     if (e) {
-      // eslint-disable-next-line no-console
-      console.log(e);
+      logger.write(e);
       return false;
     }
-    // eslint-disable-next-line no-console
-    console.log('Database client connected');
+    logger.write('Database client connected');
     return true;
   });
 };
