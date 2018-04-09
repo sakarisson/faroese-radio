@@ -16,12 +16,12 @@ class Logger {
     this.enabled = true;
   }
 
-  write(message) {
+  write(...args) {
     if (!this.enabled) {
       return;
     }
     // eslint-disable-next-line no-console
-    console.log(message);
+    args.forEach(arg => console.log(arg));
   }
 }
 
