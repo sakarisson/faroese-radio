@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "init-start": "npm install && npm start",
     "start": "nodemon --exec babel-node src/server.js",
     "build-container": "docker build . -t sakarisson/faroese-radio && docker-compose up",
     "watch": "jest --watch -o"

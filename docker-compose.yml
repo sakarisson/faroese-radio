@@ -14,13 +14,15 @@ services:
     networks:
       - webnet
   web:
-    image: sakarisson/faroese-radio
+    volumes:
+      - ./app:/app
+    build: .
     ports:
       - 8081:8081
     networks:
       - webnet
     environment:
       DB_HOST: db
-    command: ['./wait-for-it.sh', 'db:5432', '--', 'npm', 'start']
+    command: ['/wait-for-it.sh', 'db:5432', '--', 'npm', 'run', 'init-start']
 networks:
   webnet:
