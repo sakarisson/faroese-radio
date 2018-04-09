@@ -1,14 +1,11 @@
 FROM node:carbon
 WORKDIR /app
 
-COPY package-lock.json .
-COPY package.json .
+COPY ./app .
 
 RUN npm i
 
 RUN npm i -g nodemon babel-cli
-
-COPY . .
 
 COPY wait-for-it.sh .
 RUN chmod +x ./wait-for-it.sh

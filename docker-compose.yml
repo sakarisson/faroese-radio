@@ -6,14 +6,17 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: faroese-radio
+    ports:
+      - 5433:5432
     volumes:
       - ./10-init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database:/var/lib/postgresql/data
     networks:
       - webnet
   web:
     image: sakarisson/faroese-radio
     ports:
-      - '8081:8081'
+      - 8081:8081
     networks:
       - webnet
     environment:
