@@ -26,7 +26,7 @@ export const connect = async () => {
 
 export const getStationId = async (shortName) => {
   try {
-    const result = await client.query('select * from stations where short_name = $1', [shortName]);
+    const result = await client.query('select * from stations where lower(short_name) = lower($1)', [shortName]);
     if (result.rows.length > 0) {
       return result.rows[0].id;
     }
@@ -41,7 +41,7 @@ export const getLastStationSong = async (shortName) => {
     const result = await client.query(`
       select artists.name as artist, songs.title
       from artists, songs, stations, song_plays
-      where stations.short_name = $1
+      where lower(stations.short_name) = lower($1)
       and song_plays.fk_stations = stations.id
       and song_plays.fk_songs = songs.id
       and songs.fk_artists = artists.id
@@ -50,16 +50,15 @@ export const getLastStationSong = async (shortName) => {
     const { artist, title } = result.rows[0];
     return { artist, title };
   } catch (e) {
-    // continue
+    throw e;
   }
-  return null;
 };
 
 export const getArtistId = async (artist) => {
   try {
     const result = await client.query(`
       select artists.id from artists
-      where artists.name = $1
+      where lower(artists.name) = lower($1)
     `, [
       artist,
     ]);
@@ -79,8 +78,8 @@ export const getSongId = async (song) => {
     const result = await client.query(`
       select songs.id from songs, artists
       where songs.fk_artists = artists.id
-      and artists.name = $1
-      and songs.title = $2
+      and lower(artists.name) = lower($1)
+      and lower(songs.title) = lower($2)
     `, [
       song.artist,
       song.title,
@@ -172,6 +171,7 @@ export const insertSongplayToDatabase = async (songId, stationId) => {
       (fk_songs, fk_stations)
       values
       ($1, $2)
+      returning id
     `, [
       songId,
       stationId,

@@ -26,12 +26,16 @@ class Parser extends EventEmitter {
 
   async startListening() {
     this.lastSong = await getLastStationSong(this.shortName);
-    this.interval = setInterval(() => {
+    const attemptToUpdate = () => {
       try {
         this.updateCurrentSong();
       } catch (e) {
         logger.write(e.message);
       }
+    };
+    attemptToUpdate();
+    this.interval = setInterval(() => {
+      attemptToUpdate();
     }, 1000);
   }
 

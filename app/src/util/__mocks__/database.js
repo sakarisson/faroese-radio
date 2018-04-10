@@ -109,7 +109,7 @@ export const insertSongplayToDatabase = async (songId, stationId) => {
     fk_stations: stationId,
     time_played: time,
   });
-  return true;
+  return id;
 };
 
 export default null;
