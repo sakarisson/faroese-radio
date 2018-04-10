@@ -22,7 +22,8 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jest": "^21.14.0",
-    "regenerator-runtime": "^0.11.1"
+    "regenerator-runtime": "^0.11.1",
+    "supertest": "^3.0.0"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
   "dependencies": {
     "dotenv": "^5.0.1",
     "events": "^2.0.0",
+    "express": "^4.16.3",
     "fs": "0.0.1-security",
     "moment": "^2.22.0",
     "node-fetch": "^2.1.2",

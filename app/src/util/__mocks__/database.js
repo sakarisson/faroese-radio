@@ -9,16 +9,20 @@ const mockDatabase = {
   }],
   artists: [{
     id: 1,
+    name: 'Test Artist',
+  },
+  {
+    id: 2,
     name: 'kvf Last Artist',
   }],
   songs: [{
-    id: 1,
+    id: 2,
     title: 'kvf Last Song',
-    fk_artists: 1,
+    fk_artists: 2,
   }],
   song_plays: [{
     id: 1,
-    fk_songs: 1,
+    fk_songs: 2,
     fk_stations: 1,
     time_played: '2018-04-06 10:20:21.196721+03',
   }],
@@ -110,6 +114,11 @@ export const insertSongplayToDatabase = async (songId, stationId) => {
     time_played: time,
   });
   return id;
+};
+
+export const getArtistByName = async (name) => {
+  const { artists } = mockDatabase;
+  return _.findWhere(artists, { name }).id;
 };
 
 export default null;

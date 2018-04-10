@@ -182,4 +182,18 @@ export const insertSongplayToDatabase = async (songId, stationId) => {
   }
 };
 
+export const getArtistByName = async (name) => {
+  try {
+    const result = await client.query(`
+      select id from artists
+      where lower(artists.name) = lower($1)
+    `, [name]);
+
+    return result.rows[0].id;
+  } catch (e) {
+    logger.write(e.message);
+  }
+  return null;
+};
+
 export default null;
