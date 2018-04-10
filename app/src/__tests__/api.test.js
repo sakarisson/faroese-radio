@@ -10,8 +10,21 @@ describe('API', () => {
       .expect(404, done);
   });
 
-  it('"artists/test Test Artist" should yield data', async () => {
-    const result = await request(app).get('/api/artist?name=Test Artist');
-    expect(result.body).toEqual({ id: 1 });
+  describe('artists', () => {
+    it('Fetching "test Artist" should yield data', async () => {
+      const result = await request(app).get('/api/artist?name=Test Artist');
+      expect(result.body).toEqual({ id: 1 });
+    });
+  });
+
+  describe('songs', () => {
+    it('should be possible to get the latest songs', async () => {
+      const result = await request(app).get('/api/songs');
+      expect(result.body).toContainEqual({
+        artist: 'kvf Last Artist',
+        title: 'kvf Last Song',
+        time_played: '2018-04-06 10:20:21.196721+03',
+      });
+    });
   });
 });
