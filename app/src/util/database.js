@@ -166,7 +166,7 @@ export const addStationToDatabase = async (station) => {
 
 export const insertSongplayToDatabase = async (songId, stationId) => {
   try {
-    await client.query(`
+    const result = await client.query(`
       insert into song_plays
       (fk_songs, fk_stations)
       values
@@ -176,10 +176,10 @@ export const insertSongplayToDatabase = async (songId, stationId) => {
       songId,
       stationId,
     ]);
+    return result.rows[0].id;
   } catch (e) {
     throw e;
   }
-  return true;
 };
 
 export default null;
