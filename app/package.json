@@ -6,7 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init-start": "npm install && npm start",
-    "start": "nodemon --exec babel-node src/server.js",
+    "server": "nodemon --exec babel-node src/frontend/server.js",
+    "collector": "nodemon --exec babel-node src/collector.js",
+    "build-client": "cd src/frontend/client && npm run build && cd ../..",
+    "dev-client": "cd src/frontend/client && npm start",
+    "dev": "concurrently --kill-others-on-fail \"MODE=dev npm run server\" \"npm run collector\" \"npm run dev-client\"",
+    "prod": "npm run build-client && concurrently --kill-others-on-fail \"MODE=production npm run server\" \"npm run collector\"",
     "build-container": "docker build . -t sakarisson/faroese-radio && docker-compose up",
     "watch": "jest --watch -o"
   },
