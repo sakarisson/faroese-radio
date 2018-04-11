@@ -1,5 +1,10 @@
 import express from 'express';
-import { getArtistByName } from '../util/database';
+import {
+  getArtistByName,
+  connect,
+} from '../util/database';
+
+connect();
 
 const api = express.Router();
 
