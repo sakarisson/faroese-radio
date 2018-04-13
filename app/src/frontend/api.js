@@ -1,6 +1,8 @@
 import express from 'express';
 import {
-  getArtistByName,
+  getArtistSongs,
+  getAllArtists,
+  getMostRecentSongs,
   connect,
 } from '../util/database';
 
@@ -12,18 +14,24 @@ const handleError = (res, error) => {
   res.status(error.status).send({ error: error.message });
 };
 
-api.get('/artist', async (req, res) => {
+api.get('/artists', async (req, res) => {
   const { name } = req.query;
   if (name === undefined) {
-    handleError(res, { status: 401, message: 'Use param: name' });
-    return;
-  }
-  const result = await getArtistByName(name);
-  if (result !== null) {
-    res.send({ id: result });
+    const artists = await getAllArtists();
+    res.send(artists);
   } else {
-    handleError(res, { status: 404, message: `Artist: ${name} not found` });
+    const songs = await getArtistSongs(name);
+    if (songs.length === 0) {
+      handleError(res, { status: 404, message: `Artist: ${name} not found` });
+      return;
+    }
+    res.send({ songs });
   }
+});
+
+api.get('/recent', async (req, res) => {
+  const songs = await getMostRecentSongs();
+  res.send({ songs });
 });
 
 export default api;

@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "init-start": "npm install && npm start",
-    "server": "nodemon --exec babel-node src/frontend/server.js",
-    "collector": "nodemon --exec babel-node src/collector.js",
+    "server": "nodemon --ignore 'client/' --exec babel-node src/frontend/server.js",
+    "collector": "nodemon --ignore 'client/' --exec babel-node src/collector.js",
     "build-client": "cd src/frontend/client && npm run build && cd ../..",
     "dev-client": "cd src/frontend/client && npm start",
     "dev": "concurrently --kill-others-on-fail \"MODE=dev npm run server\" \"npm run collector\" \"npm run dev-client\"",
@@ -27,6 +27,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jest": "^21.14.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "regenerator-runtime": "^0.11.1",
     "supertest": "^3.0.0"
