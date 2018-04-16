@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Artist from './Artist';
+import { Link } from 'react-router-dom';
 import keyGen from '../../Helpers/KeyGenerator';
 
 const AllArtists = props => (
   <div className="allArtists">
-    {props.artists.map(artist => <Artist name={artist.name} key={`artist_${keyGen.next}`} />)}
+    {props.store.getState().artists.map(artist => <Link to={`/artists/${artist.name}`} key={keyGen.next}><p>{artist.name}</p></Link>)}
   </div>
 );
 
 AllArtists.propTypes = {
-  artists: PropTypes.arrayOf(PropTypes.object).isRequired,
+  store: PropTypes.shape({ getState: PropTypes.func }).isRequired,
 };
 
 export default AllArtists;

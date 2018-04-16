@@ -1,32 +1,35 @@
 import React from 'react';
 import { render } from 'react-dom';
-// import {
-//   BrowserRouter as Router,
-//   Route,
-//   Switch,
-// } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from 'react-router-dom';
 import { createStore } from 'redux';
 import Home from './Components/Home';
-// import AllArtists from './Components/Artists/AllArtists';
 import registerServiceWorker from './registerServiceWorker';
 import dataStore from './Reducers';
+import ArtistRoutes from './Helpers/GenerateArtistRoutes';
 
 const store = createStore(dataStore);
 
 const App = () => (
-  <div className="container">
-    <Home store={store} />
-  </div>
+  <Router>
+    <div className="container">
+      <Switch>
+        <Route exact path="/" render={() => <Home store={store} />} />
+        {ArtistRoutes(store)}
+      </Switch>
+    </div>
+  </Router>
 );
 
-// const App = () => (
-//   <Router>
-//     <Switch>
-//       <Route exact path="/" component={Home} store={store} />
-//       <Route exact path="/artists" component={AllArtists} store={store} />
-//     </Switch>
-//   </Router>
-// );
+const initializeApp = async () => {
+  const result = await fetch('/api/artists');
+  const artists = await result.json();
+  store.dispatch({ type: 'ADD_ARTISTS', payload: artists });
+  render(<App />, document.getElementById('root'));
+};
 
-render(<App />, document.getElementById('root'));
+initializeApp();
 registerServiceWorker();
