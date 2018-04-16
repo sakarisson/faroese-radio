@@ -8,8 +8,8 @@
     "init": "npm install && cd src/frontend/client && npm install && cd ../..",
     "init-start-dev": "npm run init && npm run dev",
     "init-start-prod": "npm run init && npm run  prod",
-    "server": "nodemon --exec babel-node src/frontend/server.js",
-    "collector": "nodemon --exec babel-node src/collector.js",
+    "server": "nodemon --ignore 'client/' --exec babel-node src/frontend/server.js",
+    "collector": "nodemon --ignore 'client/' --exec babel-node src/collector.js",
     "build-client": "cd src/frontend/client && npm run build && cd ../..",
     "dev-client": "cd src/frontend/client && npm start",
     "dev": "concurrently --kill-others-on-fail \"set MODE=dev && npm run server\" \"npm run collector\" \"npm run dev-client\"",
@@ -29,6 +29,7 @@
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jest": "^21.14.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "regenerator-runtime": "^0.11.1",
     "supertest": "^3.0.0"

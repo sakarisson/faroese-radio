@@ -1,22 +1,22 @@
 import React from 'react';
 import { render } from 'react-dom';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom';
-import Home from './Components/Home';
-import AllArtists from './Components/Artists/AllArtists';
+import { createStore } from 'redux';
 import registerServiceWorker from './registerServiceWorker';
+import dataStore from './Reducers';
+import { addArtists } from './Actions/Artists';
+import App from './Components/App';
 
-const App = () => (
-  <Router>
-    <Switch>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/artists" component={AllArtists} />
-    </Switch>
-  </Router>
-);
+const store = createStore(dataStore);
 
-render(<App />, document.getElementById('root'));
+const renderApp = () => render(<App store={store} />, document.getElementById('root'));
+
+const initializeApp = async () => {
+  const result = await fetch('/api/artists');
+  const artists = await result.json();
+  store.dispatch(addArtists(artists));
+  renderApp();
+};
+
+store.subscribe(renderApp);
+initializeApp();
 registerServiceWorker();

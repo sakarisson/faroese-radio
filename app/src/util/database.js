@@ -182,16 +182,43 @@ export const insertSongplayToDatabase = async (songId, stationId) => {
   }
 };
 
-export const getArtistByName = async (name) => {
+export const getArtistSongs = async (name) => {
   try {
     const result = await client.query(`
-      select id from artists
-      where lower(artists.name) = lower($1)
+      select title
+      from artists, songs
+      where songs.fk_artists = artists.id
+      and lower(artists.name) = lower($1)
+      order by title
     `, [name]);
-
-    return result.rows[0].id;
+    return result.rows;
   } catch (e) {
-    logger.write(e.message);
+    logger.write(e);
+  }
+  return null;
+};
+
+export const getAllArtists = async () => {
+  try {
+    const result = await client.query(`
+      select * from artists
+      order by artists.name
+    `);
+    return result.rows;
+  } catch (e) {
+    logger.write(e);
+  }
+  return null;
+};
+
+export const getMostRecentSongs = async () => {
+  try {
+    const result = await client.query(`
+      select * from public."100_most_recent_songs"
+    `);
+    return result.rows;
+  } catch (e) {
+    logger.write(e);
   }
   return null;
 };
