@@ -5,8 +5,8 @@ import {
   Switch,
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import ArtistRoutes from '../Helpers/GenerateArtistRoutes';
-import Home from './Home';
+import ArtistRoutes from './GenerateArtistRoutes';
+import Home from '../Home';
 
 const Routes = props => (
   <div className="routesContainer">

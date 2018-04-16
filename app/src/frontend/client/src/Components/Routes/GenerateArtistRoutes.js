@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import AllArtists from '../Components/Artists/AllArtists';
-import Artist from '../Components/Artists/Artist';
-import keyGen from './KeyGenerator';
+import AllArtists from '../Artists/AllArtists';
+import Artist from '../Artists/Artist';
+import keyGen from '../../Helpers/KeyGenerator';
 
 export default store => (
   <Switch>
