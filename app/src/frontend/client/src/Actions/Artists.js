@@ -3,4 +3,9 @@ export const addArtists = artists => ({
   payload: artists,
 });
 
+export const setArtistSongs = data => ({
+  type: 'ADD_ARTIST_SONGS',
+  payload: data,
+});
+
 export default null;

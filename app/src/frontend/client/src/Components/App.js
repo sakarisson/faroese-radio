@@ -4,6 +4,7 @@ import Routes from './Routes';
 
 const App = props => (
   <div className="container">
+    <h1>Føroyskt útvarp</h1>
     <Routes store={props.store} />
   </div>
 );
