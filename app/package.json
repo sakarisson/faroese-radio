@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "init-start": "npm install && npm start",
+    "init-start": "npm install && npm run prod",
     "server": "nodemon --ignore 'client/' --exec babel-node src/frontend/server.js",
     "collector": "nodemon --ignore 'client/' --exec babel-node src/collector.js",
     "build-client": "cd src/frontend/client && npm run build && cd ../..",
