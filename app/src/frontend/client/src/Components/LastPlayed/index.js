@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import keys from '../../Helpers/KeyGenerator';
 import Song from './Song';
 
 const LastPlayed = props => (
@@ -17,8 +18,9 @@ const LastPlayed = props => (
         {props.songs.map(song => (
           <Song
             title={song.title}
-            artist={song.title}
+            artist={song.artist}
             station={song.station}
+            key={keys.next}
           />
         ))}
       </tbody>

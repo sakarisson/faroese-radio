@@ -21,7 +21,7 @@ api.get('/artists/:name', async (req, res) => {
   res.send(songs);
 });
 
-api.get('/recent', async (req, res) => {
+api.get('/latest', async (req, res) => {
   const songs = await getMostRecentSongs();
   res.send(songs);
 });

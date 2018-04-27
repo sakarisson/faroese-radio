@@ -4,6 +4,7 @@ import { createStore } from 'redux';
 import registerServiceWorker from './registerServiceWorker';
 import dataStore from './Reducers';
 import { initializeArtists } from './Data/Artists';
+import { initializeLatestSongs } from './Data/Songs';
 import App from './Components/App';
 
 const store = createStore(dataStore);
@@ -11,7 +12,10 @@ const store = createStore(dataStore);
 const renderApp = () => render(<App store={store} />, document.getElementById('root'));
 
 const initializeApp = async () => {
-  await initializeArtists(store);
+  await Promise.all([
+    initializeArtists(store),
+    initializeLatestSongs(store),
+  ]);
   renderApp();
 };
 
